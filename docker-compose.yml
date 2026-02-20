@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  api-gateway:
+    build: ./api-gateway
+    container_name: juanaia-api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - LLM_URL=http://llm:8001
+      - MEM_URL=http://memory:8002
+      - FIN_URL=http://finanzas:8003
+      - TTS_URL=http://tts:8004
+      - HTTP_TIMEOUT_SECONDS=10
+      - LOG_LEVEL=INFO
+    depends_on:
+      - llm
+      - memory
+      - finanzas
+      - tts
+
+  memory:
+    build: ./services/memory
+    container_name: juanaia-memory
+    ports:
+      - "8002:8002"
+
+  llm:
+    build: ./services/llm
+    container_name: juanaia-llm
+    ports:
+      - "8001:8001"
+
+  finanzas:
+    build: ./services/finanzas
+    container_name: juanaia-finanzas
+    ports:
+      - "8003:8003"
+
+  tts:
+    build: ./services/tts
+    container_name: juanaia-tts
+    ports:
+      - "8004:8004"
